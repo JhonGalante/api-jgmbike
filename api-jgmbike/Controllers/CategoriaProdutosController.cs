@@ -12,6 +12,7 @@ namespace api_jgmbike.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [ApiConventionType(typeof(DefaultApiConventions))]
     public class CategoriaProdutosController : ControllerBase
     {
         private readonly AppDbContext _context;
@@ -25,14 +26,14 @@ namespace api_jgmbike.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CategoriaProduto>>> GetCategoriasProdutos()
         {
-            return await _context.CategoriasProdutos.ToListAsync();
+            return await _context.CategoriaProdutos.ToListAsync();
         }
 
         // GET: api/CategoriaProdutos/5
         [HttpGet("{id}")]
         public async Task<ActionResult<CategoriaProduto>> GetCategoriaProduto(int id)
         {
-            var categoriaProduto = await _context.CategoriasProdutos.FindAsync(id);
+            var categoriaProduto = await _context.CategoriaProdutos.FindAsync(id);
 
             if (categoriaProduto == null)
             {
@@ -78,7 +79,7 @@ namespace api_jgmbike.Controllers
         [HttpPost]
         public async Task<ActionResult<CategoriaProduto>> PostCategoriaProduto(CategoriaProduto categoriaProduto)
         {
-            _context.CategoriasProdutos.Add(categoriaProduto);
+            _context.CategoriaProdutos.Add(categoriaProduto);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetCategoriaProduto", new { id = categoriaProduto.Id }, categoriaProduto);
@@ -88,13 +89,13 @@ namespace api_jgmbike.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCategoriaProduto(int id)
         {
-            var categoriaProduto = await _context.CategoriasProdutos.FindAsync(id);
+            var categoriaProduto = await _context.CategoriaProdutos.FindAsync(id);
             if (categoriaProduto == null)
             {
                 return NotFound();
             }
 
-            _context.CategoriasProdutos.Remove(categoriaProduto);
+            _context.CategoriaProdutos.Remove(categoriaProduto);
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -102,7 +103,7 @@ namespace api_jgmbike.Controllers
 
         private bool CategoriaProdutoExists(int id)
         {
-            return _context.CategoriasProdutos.Any(e => e.Id == id);
+            return _context.CategoriaProdutos.Any(e => e.Id == id);
         }
     }
 }

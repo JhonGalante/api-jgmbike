@@ -1,4 +1,5 @@
 using api_jgmbike.Context;
+using api_jgmbike.Repository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -32,6 +33,8 @@ namespace api_jgmbike
             services.AddControllers();
 
             services.AddDbContext<AppDbContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("Default")));
+
+            services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
             services.AddSwaggerGen(c =>
             {

@@ -7,32 +7,34 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using api_jgmbike.Context;
 using api_jgmbike.Models;
+using api_jgmbike.Repository;
 
 namespace api_jgmbike.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [ApiConventionType(typeof(DefaultApiConventions))]
     public class ProdutosController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly IRepository<Produto> _repo;
 
-        public ProdutosController(AppDbContext context)
+        public ProdutosController(IRepository<Produto> repo)
         {
-            _context = context;
+            _repo = repo;
         }
 
         // GET: api/Produtos
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Produto>>> GetProdutos()
+        public ActionResult<IEnumerable<Produto>> GetProdutos()
         {
-            return await _context.Produtos.ToListAsync();
+            return _repo.Get().ToList();
         }
 
         // GET: api/Produtos/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Produto>> GetProduto(int id)
         {
-            var produto = await _context.Produtos.FindAsync(id);
+            var produto = await _repo.GetById(opt => opt.Id == id);
 
             if (produto == null)
             {
@@ -45,18 +47,16 @@ namespace api_jgmbike.Controllers
         // PUT: api/Produtos/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutProduto(int id, Produto produto)
+        public IActionResult PutProduto(int id, Produto produto)
         {
             if (id != produto.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(produto).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
+                _repo.Update(produto);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -76,33 +76,31 @@ namespace api_jgmbike.Controllers
         // POST: api/Produtos
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Produto>> PostProduto(Produto produto)
+        public ActionResult<Produto> PostProduto(Produto produto)
         {
-            _context.Produtos.Add(produto);
-            await _context.SaveChangesAsync();
-
+            _repo.Add(produto);
             return CreatedAtAction("GetProduto", new { id = produto.Id }, produto);
         }
 
         // DELETE: api/Produtos/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteProduto(int id)
+        public IActionResult DeleteProduto(int id)
         {
-            var produto = await _context.Produtos.FindAsync(id);
+            var produto = _repo.GetById(prod => prod.Id == id).Result;
+
             if (produto == null)
             {
                 return NotFound();
             }
 
-            _context.Produtos.Remove(produto);
-            await _context.SaveChangesAsync();
+            _repo.Delete(produto);
 
             return NoContent();
         }
 
         private bool ProdutoExists(int id)
         {
-            return _context.Produtos.Any(e => e.Id == id);
+            return _repo.EntityExists(id);
         }
     }
 }

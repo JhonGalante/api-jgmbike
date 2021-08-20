@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 
 namespace api_jgmbike.Context
 {
-    public class AppDbContext : IdentityDbContext
+    public class AppDbContext : DbContext
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options){}
 
         public DbSet<Produto> Produtos { get; set; }
         public DbSet<Servico> Servicos { get; set; }
-        public DbSet<CategoriaProduto> CategoriasProdutos { get; set; }
+        public DbSet<CategoriaProduto> CategoriaProdutos { get; set; }
     }
 }

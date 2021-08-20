@@ -12,6 +12,7 @@ namespace api_jgmbike.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [ApiConventionType(typeof(DefaultApiConventions))]
     public class ServicosController : ControllerBase
     {
         private readonly AppDbContext _context;
