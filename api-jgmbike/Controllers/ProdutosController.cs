@@ -1,24 +1,25 @@
-﻿using System;
+﻿using api_jgmbike.DTOs;
+using api_jgmbike.Models;
+using api_jgmbike.Repository;
+using api_jgmbike.Repository.ProdutoRepository;
+using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using api_jgmbike.Context;
-using api_jgmbike.Models;
-using api_jgmbike.Repository;
 
 namespace api_jgmbike.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     [ApiConventionType(typeof(DefaultApiConventions))]
+    [EnableCors("PoliticaJGMBike")]
     public class ProdutosController : ControllerBase
     {
-        private readonly IRepository<Produto> _repo;
+        private readonly IProdutoRepository _repo;
 
-        public ProdutosController(IRepository<Produto> repo)
+        public ProdutosController(IProdutoRepository repo)
         {
             _repo = repo;
         }
@@ -28,6 +29,13 @@ namespace api_jgmbike.Controllers
         public ActionResult<IEnumerable<Produto>> GetProdutos()
         {
             return _repo.Get().ToList();
+        }
+
+        // GET: api/ProdutosCategorias
+        [HttpGet("ProdutosCategorias")]
+        public ActionResult<IEnumerable<ProdutoDTO>> GetProdutosCategorias()
+        {
+            return _repo.GetProdutosCategorias().ToList();
         }
 
         // GET: api/Produtos/5
