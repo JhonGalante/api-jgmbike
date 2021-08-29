@@ -8,6 +8,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using System;
+using System.IO;
+using System.Reflection;
 
 namespace api_jgmbike
 {
@@ -50,7 +53,21 @@ namespace api_jgmbike
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "api_jgmbike", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { 
+                    Title = "WebAPI JGM Bike", 
+                    Version = "v1",
+                    Description = "WebAPI da aplicação da aplicação de catálogo da JGM Bike",
+                    Contact = new OpenApiContact
+                    {
+                        Name = "Jhonata Galante",
+                        Email = "jhonata.galante@gmail.com",
+                        Url = new Uri("https://www.linkedin.com/in/jhonata-galante-495947b0/")
+                    }
+                });
+
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
             });
         }
 
