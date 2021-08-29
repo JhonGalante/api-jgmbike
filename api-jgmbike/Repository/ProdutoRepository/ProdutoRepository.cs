@@ -25,18 +25,18 @@ namespace api_jgmbike.Repository.ProdutoRepository
             foreach (var produto in produtos)
             {
                 var produtoDTO = new ProdutoDTO();
-                produtoDTO.CategoriaId = produto.Id;
+                produtoDTO.ProdutoId = produto.Id;
                 produtoDTO.Nome = produto.Nome;
                 produtoDTO.Preco = produto.Preco;
-                produtoDTO.Estoque = produto.Estoque;
                 produtoDTO.Descricao = produto.Descricao;
                 produtoDTO.ImagemUrl = produto.ImagemUrl;
                 produtoDTO.CategoriaId = produto.CategoriaId;
                 produtoDTO.CategoriaNome = produto.Categoria.Nome;
+                produtoDTO.Disponivel = (produto.Estoque > 0) ? true : false;
                 this.produtosDTO.Add(produtoDTO);
             }
 
-            return this.produtosDTO;
+            return this.produtosDTO.OrderByDescending(p => p.Disponivel).ToList();
         }
     }
 }
