@@ -7,29 +7,44 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using api_jgmbike.Context;
 using api_jgmbike.Models;
+using Microsoft.AspNetCore.Cors;
+using api_jgmbike.DTOs;
+using api_jgmbike.Repository.ServicoRepository;
 
 namespace api_jgmbike.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     [ApiConventionType(typeof(DefaultApiConventions))]
+    [EnableCors("PoliticaJGMBike")]
     public class ServicosController : ControllerBase
     {
         private readonly AppDbContext _context;
+        private readonly IServicoRepository _repo;
 
-        public ServicosController(AppDbContext context)
+        public ServicosController(AppDbContext context, IServicoRepository repo)
         {
             _context = context;
+            _repo = repo;
         }
 
         // GET: api/Servicos
+        /// <summary>
+        /// Retorna todos os serviços
+        /// </summary>
+        /// <returns>Objetos de Serviço</returns>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Servico>>> GetServicos()
+        public ActionResult<IEnumerable<ServicoDTO>> GetServicos()
         {
-            return await _context.Servicos.ToListAsync();
+            return _repo.GetServicos().ToList(); 
         }
 
         // GET: api/Servicos/5
+        /// <summary>
+        /// Retorna um serviço pelo id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>Objeto de Serviço</returns>
         [HttpGet("{id}")]
         public async Task<ActionResult<Servico>> GetServico(int id)
         {
@@ -44,7 +59,12 @@ namespace api_jgmbike.Controllers
         }
 
         // PUT: api/Servicos/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        /// <summary>
+        /// Atualiza um registro de serviço no banco
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="servico"></param>
+        /// <returns>ActionResult</returns>
         [HttpPut("{id}")]
         public async Task<IActionResult> PutServico(int id, Servico servico)
         {
@@ -75,7 +95,11 @@ namespace api_jgmbike.Controllers
         }
 
         // POST: api/Servicos
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        /// <summary>
+        /// Insere um novo registro de serviço no banco
+        /// </summary>
+        /// <param name="servico"></param>
+        /// <returns>Objeto de serviço inserido</returns>
         [HttpPost]
         public async Task<ActionResult<Servico>> PostServico(Servico servico)
         {
@@ -86,6 +110,11 @@ namespace api_jgmbike.Controllers
         }
 
         // DELETE: api/Servicos/5
+        /// <summary>
+        /// Deleta um registro de serviço no banco
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>ActionResult</returns>
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteServico(int id)
         {

@@ -4,6 +4,41 @@
         <name>api-jgmbike</name>
     </assembly>
     <members>
+        <member name="M:api_jgmbike.Controllers.CategoriaProdutosController.GetCategoriasProdutos">
+            <summary>
+            Retorna todas as categorias do banco
+            </summary>
+            <returns>Objetos de CategoriaProdutoDTO</returns>
+        </member>
+        <member name="M:api_jgmbike.Controllers.CategoriaProdutosController.GetCategoriaProduto(System.Int32)">
+            <summary>
+            Retorna uma categoria pela Id
+            </summary>
+            <param name="id"></param>
+            <returns>Objeto de CategoriaProdutoDTO</returns>
+        </member>
+        <member name="M:api_jgmbike.Controllers.CategoriaProdutosController.PutCategoriaProduto(System.Int32,api_jgmbike.Models.CategoriaProduto)">
+            <summary>
+            Atualiza um registro de categoria no banco
+            </summary>
+            <param name="id"></param>
+            <param name="categoriaProduto"></param>
+            <returns>Action Result</returns>
+        </member>
+        <member name="M:api_jgmbike.Controllers.CategoriaProdutosController.PostCategoriaProduto(api_jgmbike.Models.CategoriaProduto)">
+            <summary>
+            Insere um novo registro de categoria
+            </summary>
+            <param name="categoriaProduto"></param>
+            <returns>Objeto inserido no banco</returns>
+        </member>
+        <member name="M:api_jgmbike.Controllers.CategoriaProdutosController.DeleteCategoriaProduto(System.Int32)">
+            <summary>
+            Deleta um registro de categoria
+            </summary>
+            <param name="id"></param>
+            <returns>Action Result</returns>
+        </member>
         <member name="M:api_jgmbike.Controllers.ProdutosController.GetProdutos">
             <summary>
             Retorna todos os produtos
@@ -54,6 +89,41 @@
         <member name="M:api_jgmbike.Controllers.ProdutosController.DeleteProduto(System.Int32)">
             <summary>
             Deletar um objeto de produto do banco
+            </summary>
+            <param name="id"></param>
+            <returns>ActionResult</returns>
+        </member>
+        <member name="M:api_jgmbike.Controllers.ServicosController.GetServicos">
+            <summary>
+            Retorna todos os serviços
+            </summary>
+            <returns>Objetos de Serviço</returns>
+        </member>
+        <member name="M:api_jgmbike.Controllers.ServicosController.GetServico(System.Int32)">
+            <summary>
+            Retorna um serviço pelo id
+            </summary>
+            <param name="id"></param>
+            <returns>Objeto de Serviço</returns>
+        </member>
+        <member name="M:api_jgmbike.Controllers.ServicosController.PutServico(System.Int32,api_jgmbike.Models.Servico)">
+            <summary>
+            Atualiza um registro de serviço no banco
+            </summary>
+            <param name="id"></param>
+            <param name="servico"></param>
+            <returns>ActionResult</returns>
+        </member>
+        <member name="M:api_jgmbike.Controllers.ServicosController.PostServico(api_jgmbike.Models.Servico)">
+            <summary>
+            Insere um novo registro de serviço no banco
+            </summary>
+            <param name="servico"></param>
+            <returns>Objeto de serviço inserido</returns>
+        </member>
+        <member name="M:api_jgmbike.Controllers.ServicosController.DeleteServico(System.Int32)">
+            <summary>
+            Deleta um registro de serviço no banco
             </summary>
             <param name="id"></param>
             <returns>ActionResult</returns>

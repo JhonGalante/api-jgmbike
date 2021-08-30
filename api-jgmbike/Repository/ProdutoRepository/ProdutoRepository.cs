@@ -38,5 +38,42 @@ namespace api_jgmbike.Repository.ProdutoRepository
 
             return this.produtosDTO.OrderByDescending(p => p.Disponivel).ToList();
         }
+
+        public IEnumerable<ProdutoDTO> GetProdutosPorCategoria(int id)
+        {
+            var produtos = _context.Produtos.Include(p => p.Categoria).Where(p => p.CategoriaId == id).ToList();
+
+            foreach (var produto in produtos)
+            {
+                var produtoDTO = new ProdutoDTO();
+                produtoDTO.ProdutoId = produto.Id;
+                produtoDTO.Nome = produto.Nome;
+                produtoDTO.Preco = produto.Preco;
+                produtoDTO.Descricao = produto.Descricao;
+                produtoDTO.ImagemUrl = produto.ImagemUrl;
+                produtoDTO.CategoriaId = produto.CategoriaId;
+                produtoDTO.CategoriaNome = produto.Categoria.Nome;
+                produtoDTO.Disponivel = (produto.Estoque > 0) ? true : false;
+                this.produtosDTO.Add(produtoDTO);
+            }
+
+            return this.produtosDTO.OrderByDescending(p => p.Disponivel).ToList();
+        }
+
+        public ProdutoDTO GetProdutoById(int id)
+        {
+            var produto = _context.Produtos.Include(p => p.Categoria).Where(p => p.Id == id).SingleOrDefault();
+            var produtoDTO = new ProdutoDTO();
+            produtoDTO.ProdutoId = produto.Id;
+            produtoDTO.Nome = produto.Nome;
+            produtoDTO.Preco = produto.Preco;
+            produtoDTO.Descricao = produto.Descricao;
+            produtoDTO.ImagemUrl = produto.ImagemUrl;
+            produtoDTO.CategoriaId = produto.CategoriaId;
+            produtoDTO.CategoriaNome = produto.Categoria.Nome;
+            produtoDTO.Disponivel = (produto.Estoque > 0) ? true : false;
+
+            return produtoDTO;
+        }
     }
 }

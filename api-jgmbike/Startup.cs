@@ -1,6 +1,8 @@
 using api_jgmbike.Context;
 using api_jgmbike.Repository;
+using api_jgmbike.Repository.CategoriaProdutosRepository;
 using api_jgmbike.Repository.ProdutoRepository;
+using api_jgmbike.Repository.ServicoRepository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -50,6 +52,8 @@ namespace api_jgmbike
 
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddScoped<IProdutoRepository, ProdutoRepository>();
+            services.AddScoped<IServicoRepository, ServicoRepository>();
+            services.AddScoped<ICategoriaProdutosRepository, CategoriaProdutosRepository>();
 
             services.AddSwaggerGen(c =>
             {

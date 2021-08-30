@@ -46,6 +46,12 @@ namespace api_jgmbike.Controllers
             return _repo.GetProdutosCategorias().ToList();
         }
 
+        [HttpGet("ProdutosPorCategoria/{id:int}")]
+        public ActionResult<IEnumerable<ProdutoDTO>> GetProdutosPorCategoria(int id)
+        {
+            return _repo.GetProdutosPorCategoria(id).ToList();
+        }
+
         // GET: api/Produtos/5
         /// <summary>
         /// Retorna um produto pelo seu id
@@ -53,9 +59,9 @@ namespace api_jgmbike.Controllers
         /// <param name="id"></param>
         /// <returns>Objeto Produto</returns>
         [HttpGet("{id}")]
-        public async Task<ActionResult<Produto>> GetProduto(int id)
+        public ActionResult<ProdutoDTO> GetProduto(int id)
         {
-            var produto = await _repo.GetById(opt => opt.Id == id);
+            var produto = _repo.GetProdutoById(id);
 
             if (produto == null)
             {

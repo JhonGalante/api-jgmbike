@@ -7,5 +7,7 @@ namespace api_jgmbike.Repository.ProdutoRepository
     public interface IProdutoRepository : IRepository<Produto>
     {
         IEnumerable<ProdutoDTO> GetProdutosCategorias();
+        IEnumerable<ProdutoDTO> GetProdutosPorCategoria(int id);
+        ProdutoDTO GetProdutoById(int id);
     }
 }

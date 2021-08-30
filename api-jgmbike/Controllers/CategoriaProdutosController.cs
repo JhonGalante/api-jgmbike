@@ -7,33 +7,48 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using api_jgmbike.Context;
 using api_jgmbike.Models;
+using Microsoft.AspNetCore.Cors;
+using api_jgmbike.Repository.CategoriaProdutosRepository;
+using api_jgmbike.DTOs;
 
 namespace api_jgmbike.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     [ApiConventionType(typeof(DefaultApiConventions))]
+    [EnableCors("PoliticaJGMBike")]
     public class CategoriaProdutosController : ControllerBase
     {
         private readonly AppDbContext _context;
+        private readonly ICategoriaProdutosRepository _repo;
 
-        public CategoriaProdutosController(AppDbContext context)
+        public CategoriaProdutosController(AppDbContext context, ICategoriaProdutosRepository repo)
         {
             _context = context;
+            _repo = repo;
         }
 
         // GET: api/CategoriaProdutos
+        /// <summary>
+        /// Retorna todas as categorias do banco
+        /// </summary>
+        /// <returns>Objetos de CategoriaProdutoDTO</returns>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<CategoriaProduto>>> GetCategoriasProdutos()
+        public ActionResult<IEnumerable<CategoriaProdutoDTO>> GetCategoriasProdutos()
         {
-            return await _context.CategoriaProdutos.ToListAsync();
+            return _repo.GetCategorias().ToList();
         }
 
         // GET: api/CategoriaProdutos/5
+        /// <summary>
+        /// Retorna uma categoria pela Id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>Objeto de CategoriaProdutoDTO</returns>
         [HttpGet("{id}")]
-        public async Task<ActionResult<CategoriaProduto>> GetCategoriaProduto(int id)
+        public ActionResult<CategoriaProdutoDTO> GetCategoriaProduto(int id)
         {
-            var categoriaProduto = await _context.CategoriaProdutos.FindAsync(id);
+            var categoriaProduto = _repo.GetCategoriaById(id);
 
             if (categoriaProduto == null)
             {
@@ -44,7 +59,12 @@ namespace api_jgmbike.Controllers
         }
 
         // PUT: api/CategoriaProdutos/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        /// <summary>
+        /// Atualiza um registro de categoria no banco
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="categoriaProduto"></param>
+        /// <returns>Action Result</returns>
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCategoriaProduto(int id, CategoriaProduto categoriaProduto)
         {
@@ -75,7 +95,11 @@ namespace api_jgmbike.Controllers
         }
 
         // POST: api/CategoriaProdutos
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        /// <summary>
+        /// Insere um novo registro de categoria
+        /// </summary>
+        /// <param name="categoriaProduto"></param>
+        /// <returns>Objeto inserido no banco</returns>
         [HttpPost]
         public async Task<ActionResult<CategoriaProduto>> PostCategoriaProduto(CategoriaProduto categoriaProduto)
         {
@@ -86,6 +110,11 @@ namespace api_jgmbike.Controllers
         }
 
         // DELETE: api/CategoriaProdutos/5
+        /// <summary>
+        /// Deleta um registro de categoria
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>Action Result</returns>
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCategoriaProduto(int id)
         {
