@@ -51,6 +51,13 @@
             </summary>
             <returns>Objetos ProdutosDTO</returns>
         </member>
+        <member name="M:api_jgmbike.Controllers.ProdutosController.GetProdutosPorCategoria(System.Int32)">
+            <summary>
+            Retorna todos os produtos de uma determinada categoria
+            </summary>
+            <param name="id"></param>
+            <returns>Objetos ProdutosDTO</returns>
+        </member>
         <member name="M:api_jgmbike.Controllers.ProdutosController.GetProduto(System.Int32)">
             <summary>
             Retorna um produto pelo seu id

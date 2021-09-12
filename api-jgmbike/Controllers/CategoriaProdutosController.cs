@@ -36,7 +36,15 @@ namespace api_jgmbike.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<CategoriaProdutoDTO>> GetCategoriasProdutos()
         {
-            return _repo.GetCategorias().ToList();
+            try
+            {
+                return _repo.GetCategorias().ToList();
+            }
+            catch (Exception)
+            {
+
+                return BadRequest();
+            }
         }
 
         // GET: api/CategoriaProdutos/5
@@ -48,14 +56,23 @@ namespace api_jgmbike.Controllers
         [HttpGet("{id}")]
         public ActionResult<CategoriaProdutoDTO> GetCategoriaProduto(int id)
         {
-            var categoriaProduto = _repo.GetCategoriaById(id);
-
-            if (categoriaProduto == null)
+            try
             {
-                return NotFound();
-            }
+                var categoriaProduto = _repo.GetCategoriaById(id);
 
-            return categoriaProduto;
+                if (categoriaProduto == null)
+                {
+                    return NotFound();
+                }
+
+                return categoriaProduto;
+            }
+            catch (Exception)
+            {
+
+                return BadRequest();
+            }
+            
         }
 
         // PUT: api/CategoriaProdutos/5

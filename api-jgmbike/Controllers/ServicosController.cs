@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using api_jgmbike.Context;
+using api_jgmbike.DTOs;
+using api_jgmbike.Models;
+using api_jgmbike.Repository.ServicoRepository;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using api_jgmbike.Context;
-using api_jgmbike.Models;
-using Microsoft.AspNetCore.Cors;
-using api_jgmbike.DTOs;
-using api_jgmbike.Repository.ServicoRepository;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace api_jgmbike.Controllers
 {
@@ -36,7 +34,15 @@ namespace api_jgmbike.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<ServicoDTO>> GetServicos()
         {
-            return _repo.GetServicos().ToList(); 
+            try
+            {
+                return _repo.GetServicos().ToList(); 
+            }
+            catch (Exception)
+            {
+
+                return BadRequest();
+            }
         }
 
         // GET: api/Servicos/5
@@ -46,16 +52,24 @@ namespace api_jgmbike.Controllers
         /// <param name="id"></param>
         /// <returns>Objeto de Serviço</returns>
         [HttpGet("{id}")]
-        public async Task<ActionResult<Servico>> GetServico(int id)
+        public ActionResult<ServicoDTO> GetServico(int id)
         {
-            var servico = await _context.Servicos.FindAsync(id);
-
-            if (servico == null)
+            try
             {
-                return NotFound();
-            }
+                var servico = _repo.GetServicoById(id);
 
-            return servico;
+                if (servico == null)
+                {
+                    return NotFound();
+                }
+
+                return servico;
+            }
+            catch (Exception)
+            {
+
+                return BadRequest();
+            }
         }
 
         // PUT: api/Servicos/5
@@ -66,18 +80,16 @@ namespace api_jgmbike.Controllers
         /// <param name="servico"></param>
         /// <returns>ActionResult</returns>
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutServico(int id, Servico servico)
+        public IActionResult PutServico(int id, Servico servico)
         {
             if (id != servico.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(servico).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
+                _repo.Update(servico);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -101,11 +113,9 @@ namespace api_jgmbike.Controllers
         /// <param name="servico"></param>
         /// <returns>Objeto de serviço inserido</returns>
         [HttpPost]
-        public async Task<ActionResult<Servico>> PostServico(Servico servico)
+        public ActionResult<Servico> PostServico(Servico servico)
         {
-            _context.Servicos.Add(servico);
-            await _context.SaveChangesAsync();
-
+            _repo.Add(servico);
             return CreatedAtAction("GetServico", new { id = servico.Id }, servico);
         }
 
@@ -116,16 +126,15 @@ namespace api_jgmbike.Controllers
         /// <param name="id"></param>
         /// <returns>ActionResult</returns>
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteServico(int id)
+        public IActionResult DeleteServico(int id)
         {
-            var servico = await _context.Servicos.FindAsync(id);
+            var servico = _repo.GetById(svc => svc.Id == id).Result;
             if (servico == null)
             {
                 return NotFound();
             }
 
-            _context.Servicos.Remove(servico);
-            await _context.SaveChangesAsync();
+            _repo.Delete(servico);
 
             return NoContent();
         }

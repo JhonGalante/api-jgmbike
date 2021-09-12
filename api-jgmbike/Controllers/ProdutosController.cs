@@ -32,7 +32,15 @@ namespace api_jgmbike.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<Produto>> GetProdutos()
         {
-            return _repo.Get().ToList();
+            try
+            {
+                return _repo.Get().ToList();
+            }
+            catch (System.Exception)
+            {
+
+                return BadRequest();
+            }
         }
 
         // GET: api/ProdutosCategorias
@@ -43,13 +51,35 @@ namespace api_jgmbike.Controllers
         [HttpGet("ProdutosCategorias")]
         public ActionResult<IEnumerable<ProdutoDTO>> GetProdutosCategorias()
         {
-            return _repo.GetProdutosCategorias().ToList();
+            try
+            {
+                return _repo.GetProdutosCategorias().ToList();
+            }
+            catch (System.Exception)
+            {
+
+                return BadRequest();
+            }
         }
 
+        //GET: api/ProdutosPorCategoria/5
+        /// <summary>
+        /// Retorna todos os produtos de uma determinada categoria
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>Objetos ProdutosDTO</returns>
         [HttpGet("ProdutosPorCategoria/{id:int}")]
         public ActionResult<IEnumerable<ProdutoDTO>> GetProdutosPorCategoria(int id)
         {
-            return _repo.GetProdutosPorCategoria(id).ToList();
+            try
+            {
+                return _repo.GetProdutosPorCategoria(id).ToList();
+            }
+            catch (System.Exception)
+            {
+
+                return BadRequest();
+            }
         }
 
         // GET: api/Produtos/5
@@ -61,14 +91,23 @@ namespace api_jgmbike.Controllers
         [HttpGet("{id}")]
         public ActionResult<ProdutoDTO> GetProduto(int id)
         {
-            var produto = _repo.GetProdutoById(id);
-
-            if (produto == null)
+            try
             {
-                return NotFound();
-            }
+                var produto = _repo.GetProdutoById(id);
 
-            return produto;
+                if (produto == null)
+                {
+                    return NotFound();
+                }
+
+                return produto;
+            }
+            catch (System.Exception)
+            {
+
+                return BadRequest();
+            }
+            
         }
 
         // PUT: api/Produtos/5
